@@ -375,7 +375,7 @@
 <li>需要析构函数的类也需要拷贝和赋值操作</li>
 <li>需要拷贝操作的类也需要赋值操作，反之亦然</li>
 </ul>
-<p>对于第一点，c++primer上有这样一个经典的例子：<br><code><pre><br>    class HasPtr {<br>    public:<br>        HasPtr(const std::string &amp;s = std::string()) : ps(new std::string(s)), i(0) {}<br>        ~HasPtr() {delete ps;}<br>    private:<br>        std::string <em>ps;<br>        int i;<br>    }<br></em></pre><br>在这个HasPtr类中没有显示定义<strong>拷贝构造函数</strong>，<em>*拷贝赋值运算符</em>，所以在执行下面代码时只是进行了简单的指针拷贝<br><code><pre><br>HasPtr f(“fuck”), s(“shit”);<br>HasPtr tmp = f; // 调用了默认拷贝构造函数<br>f = s; // 调用了默认拷贝赋值运算符<br></pre></code><br>考虑下面的情形：<br><code><pre><br>HasPtr f(HasPtr hp) // HasPtr是值传递，所以进行了拷贝<br>{<br>    HasPtr ret = hp; // hp利用默认拷贝构造函数，拷贝给了ret<br>    // 处理 ret<br>    return ret; // 退出作用域，ret和hp都被销货<br>}<br></pre></code><br>当f返回时，hp和ret都被销毁，都要执行HasPtr的析构函数，但是hp和ret的成员ps却指向相同的内存，他们被释放了两次，显然是不正确的，即使侥幸没有出错，那么在函数f调用之后，再次使用f的返回值时，将会使用无效的内存。<a href="https://github.com/FengZStrong/All-in-one/tree/master/c%2B%2Bprimer/unit13/13.1.3" target="_blank" rel="external">正确的实现</a></code></p>
+<p>对于第一点，c++primer上有这样一个经典的例子：<br><code><pre><br>    class HasPtr {<br>    public:<br>        HasPtr(const std::string &amp;s = std::string()) : ps(new std::string(s)), i(0) {}<br>        ~HasPtr() {delete ps;}<br>    private:<br>        std::string <em>ps;<br>        int i;<br>    }<br></em></pre></code><br>在这个HasPtr类中没有显示定义<strong>拷贝构造函数</strong>，<em>*拷贝赋值运算符</em>，所以在执行下面代码时只是进行了简单的指针拷贝<br><code><pre><br>HasPtr f(“fuck”), s(“shit”);<br>HasPtr tmp = f; // 调用了默认拷贝构造函数<br>f = s; // 调用了默认拷贝赋值运算符<br></pre></code><br>考虑下面的情形：<br><code><pre><br>HasPtr f(HasPtr hp) // HasPtr是值传递，所以进行了拷贝<br>{<br>    HasPtr ret = hp; // hp利用默认拷贝构造函数，拷贝给了ret<br>    // 处理 ret<br>    return ret; // 退出作用域，ret和hp都被销货<br>}<br></pre></code><br>当f返回时，hp和ret都被销毁，都要执行HasPtr的析构函数，但是hp和ret的成员ps却指向相同的内存，他们被释放了两次，显然是不正确的，即使侥幸没有出错，那么在函数f调用之后，再次使用f的返回值时，将会使用无效的内存。<a href="https://github.com/FengZStrong/All-in-one/tree/master/c%2B%2Bprimer/unit13/13.1.3" target="_blank" rel="external">正确的实现</a></p>
 <p>对于第二点，考虑一个类为每个对象分配一个独有的、唯一的序号。这个类需要一个拷贝构造函数为每个新创建的对象生成一个新的、独一无二的序号。除此之外，这个拷贝构造函数从给定对象拷贝所以其他数据成员。这个类还需要自定义拷贝赋值运算符来避免将序号赋予目的对象。但是，这个类不需要自定义析构函数。<a href="https://github.com/FengZStrong/All-in-one/tree/master/c%2B%2Bprimer/unit13/13.1.4" target="_blank" rel="external">参考实现</a></p>
 
           
@@ -468,7 +468,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -479,7 +479,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
